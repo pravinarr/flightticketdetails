@@ -25,6 +25,9 @@ public class FlightController {
 			@RequestParam(value = "totalTime", required = true) final String totalTime) throws JSONException {
 		RestTemplate rest = new RestTemplate();
 		FlightTicketsResource resource = new FlightTicketsResource();
+		resource.setSrc(src);
+		resource.setDest(dest);
+		resource.setDate(depDate);
 		resource.getEconomy().addAll(buildResponse(src, dest, depDate, arrDate, totalTime, rest, "E"));
 		resource.getBusiness().addAll(buildResponse(src, dest, depDate, arrDate, totalTime, rest, "B"));
 		return resource;
@@ -60,8 +63,8 @@ public class FlightController {
 		JSONArray onwardFlights = objArray.getJSONObject(i).getJSONArray("onwardflights");
 		if (onwardFlights.length() == 0) {
 			ticket.getRoute().add(flight.getString("destination").toString());
-			ticket.setArrivalTime(flight.getString("arrdate").toString());
-			ticket.setArrivalDate(flight.getString("arrtime").toString());
+			ticket.setArrivalTime(flight.getString("arrtime").toString());
+			ticket.setArrivalDate(flight.getString("arrdate").toString());
 		} else {
 			for (int j = 0; j < onwardFlights.length(); j++) {
 				JSONObject flightNext = null;
@@ -73,8 +76,8 @@ public class FlightController {
 				ticket.getRoute().add(flightNext.getString("origin").toString());
 				if (j == onwardFlights.length() - 1) {
 					ticket.getRoute().add(flightNext.getString("destination").toString());
-					ticket.setArrivalTime(flightNext.getString("arrdate").toString());
-					ticket.setArrivalDate(flightNext.getString("arrtime").toString());
+					ticket.setArrivalTime(flightNext.getString("arrtime").toString());
+					ticket.setArrivalDate(flightNext.getString("arrdate").toString());
 				}
 
 			}
